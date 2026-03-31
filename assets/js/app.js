@@ -555,7 +555,7 @@ async function init() {
     const featured = trending.find((item) => item.backdrop_path) || trending[0];
     if (featured) setHero(featured);
     await buildRows();
-    showNotification('Benvenuto su disinfecting.it!', 'success');
+    showNotification('Benvenuto su disinfecting by kidnap.lol!', 'success');
   } catch (error) {
     console.error("Init error:", error);
     els.heroTitle.textContent = "Configurazione TMDB richiesta";
