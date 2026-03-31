@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reindirizzamento...</title>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #050816 0%, #0a0f1f 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+    .loader {
+      text-align: center;
+      color: #88a7ff;
+    }
+    .spinner {
+      width: 40px;
+      height: 40px;
+      margin: 20px auto;
+      border: 3px solid rgba(136, 167, 255, 0.3);
+      border-top-color: #88a7ff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    p {
+      color: #aeb8d0;
+    }
+  </style>
+  <script>
+    (function() {
+      const path = window.location.pathname;
+      const match = path.match(/\/(movie|tv)\/(\d+)/);
+      
+      if (match) {
+        const type = match[1];
+        const id = match[2];
+        sessionStorage.setItem('directLink', JSON.stringify({ type: type, id: id }));
+        window.location.href = '/';
+      } else {
+        window.location.href = '/';
+      }
+    })();
+  </script>
+</head>
+<body>
+  <div class="loader">
+    <div class="spinner"></div>
+    <p>Caricamento in corso...</p>
+  </div>
+</body>
+</html>

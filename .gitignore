@@ -1,0 +1,4 @@
+.env
+assets/js/config.js
+assets/js/config.local.js
+.DS_Store
