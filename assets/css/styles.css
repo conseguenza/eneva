@@ -1394,3 +1394,32 @@ img {
     font-size: 18px;
   }
 }
+
+/* Anti-adblock warning animations */
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+#adblock-warning {
+  animation: slideUp 0.3s ease;
+}
+
+#adblock-overlay {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
