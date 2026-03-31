@@ -1,11 +1,29 @@
-import { TMDB_LANGUAGE, TMDB_READ_ACCESS_TOKEN, TMDB_REGION } from "./config.js";
+// assets/js/tmdb.js
+// Secure version - Token is never exposed in the repository
+// The token is injected via GitHub Actions during build
+
+let TMDB_READ_ACCESS_TOKEN, TMDB_LANGUAGE, TMDB_REGION;
+
+// Try to load config - this file is generated during build
+try {
+  const config = await import("./config.js");
+  TMDB_READ_ACCESS_TOKEN = config.TMDB_READ_ACCESS_TOKEN;
+  TMDB_LANGUAGE = config.TMDB_LANGUAGE;
+  TMDB_REGION = config.TMDB_REGION;
+} catch (e) {
+  console.warn("Config file not found. Make sure the build process generated config.js");
+  // Placeholders for development - these won't work without token
+  TMDB_READ_ACCESS_TOKEN = "";
+  TMDB_LANGUAGE = "it-IT";
+  TMDB_REGION = "IT";
+}
 
 const API_BASE = "https://api.themoviedb.org/3";
 const IMAGE_BASE = "https://image.tmdb.org/t/p";
 
 function assertToken() {
-  if (!TMDB_READ_ACCESS_TOKEN || TMDB_READ_ACCESS_TOKEN.includes("PASTE_YOUR")) {
-    throw new Error("Token TMDB mancante. Aggiungilo a assets/js/config.js");
+  if (!TMDB_READ_ACCESS_TOKEN || TMDB_READ_ACCESS_TOKEN === "YOUR_TMDB_TOKEN_HERE") {
+    throw new Error("TMDB Token non configurato. Il token viene iniettato durante il build su GitHub Pages.");
   }
 }
 
@@ -34,7 +52,7 @@ async function request(path, params = {}) {
   });
 
   if (!response.ok) {
-    throw new Error(`Richiesta TMDB fallita: ${response.status}`);
+    throw new Error(`TMDB API Error: ${response.status} - ${response.statusText}`);
   }
 
   return response.json();
@@ -72,29 +90,51 @@ export function normalizeMedia(item, forcedType = null) {
 }
 
 export async function getTrendingAll() {
-  const data = await request("trending/all/week");
-  return (data.results || []).filter((item) => ["movie", "tv"].includes(item.media_type)).map((item) => normalizeMedia(item));
+  try {
+    const data = await request("trending/all/week");
+    return (data.results || [])
+      .filter((item) => ["movie", "tv"].includes(item.media_type))
+      .map((item) => normalizeMedia(item));
+  } catch (error) {
+    console.error("Error fetching trending:", error);
+    return [];
+  }
 }
 
 export async function getRowData(row, mediaType) {
-  if (row.endpoint) {
-    const data = await request(row.endpoint);
-    return (data.results || []).map((item) => normalizeMedia(item, mediaType));
-  }
+  try {
+    if (row.endpoint) {
+      const data = await request(row.endpoint);
+      return (data.results || []).map((item) => normalizeMedia(item, mediaType));
+    }
 
-  const data = await request(`discover/${mediaType}`, row.discover || {});
-  return (data.results || []).map((item) => normalizeMedia(item, mediaType));
+    const data = await request(`discover/${mediaType}`, row.discover || {});
+    return (data.results || []).map((item) => normalizeMedia(item, mediaType));
+  } catch (error) {
+    console.error(`Error fetching row data for ${row.title}:`, error);
+    return [];
+  }
 }
 
 export async function searchMulti(query) {
-  const data = await request("search/multi", { query, page: 1 });
-  return (data.results || [])
-    .filter((item) => ["movie", "tv"].includes(item.media_type))
-    .map((item) => normalizeMedia(item));
+  try {
+    const data = await request("search/multi", { query, page: 1 });
+    return (data.results || [])
+      .filter((item) => ["movie", "tv"].includes(item.media_type))
+      .map((item) => normalizeMedia(item));
+  } catch (error) {
+    console.error("Error searching:", error);
+    return [];
+  }
 }
 
 export async function getDetails(mediaType, id) {
-  return request(`${mediaType}/${id}`, { append_to_response: "videos,watch/providers" });
+  try {
+    return await request(`${mediaType}/${id}`, { append_to_response: "videos,watch/providers" });
+  } catch (error) {
+    console.error(`Error fetching details for ${mediaType}/${id}:`, error);
+    throw error;
+  }
 }
 
 export function getTrailerKey(details) {
@@ -106,7 +146,8 @@ export function getTrailerKey(details) {
 }
 
 export function getProviderLink(details) {
-  const region = details?.["watch/providers"]?.results?.[TMDB_REGION] || details?.["watch/providers"]?.results?.US;
+  const region = details?.["watch/providers"]?.results?.[TMDB_REGION] || 
+                  details?.["watch/providers"]?.results?.US;
   return region?.link || "";
 }
 
@@ -116,13 +157,15 @@ export async function getTVShowDetails(id) {
       append_to_response: "seasons" 
     });
     
-    const seasons = (data.seasons || []).map(season => ({
-      season_number: season.season_number,
-      name: season.name,
-      episode_count: season.episode_count,
-      poster_path: season.poster_path,
-      air_date: season.air_date
-    })).filter(s => s.season_number > 0);
+    const seasons = (data.seasons || [])
+      .map(season => ({
+        season_number: season.season_number,
+        name: season.name,
+        episode_count: season.episode_count,
+        poster_path: season.poster_path,
+        air_date: season.air_date
+      }))
+      .filter(s => s.season_number > 0);
     
     const seasonsWithEpisodes = await Promise.all(
       seasons.map(async (season) => {
@@ -138,6 +181,7 @@ export async function getTVShowDetails(id) {
           }));
           return { ...season, episodes };
         } catch (error) {
+          console.error(`Error fetching season ${season.season_number}:`, error);
           return { ...season, episodes: [] };
         }
       })
