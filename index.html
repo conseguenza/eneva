@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="disinfecting — Guarda film e serie TV in streaming gratuito. Scopri i titoli più popolari, crea la tua watchlist e gestisci i tuoi preferiti."
+    />
+    <title>disinfecting | Streaming Gratuito</title>
+    <link rel="preconnect" href="https://image.tmdb.org" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="./assets/css/styles.css" />
+  </head>
+  <body>
+    <div class="app-bg" aria-hidden="true">
+      <div class="bg-orb orb-1"></div>
+      <div class="bg-orb orb-2"></div>
+      <div class="bg-grid"></div>
+    </div>
+
+    <div class="shell">
+      <header class="site-header glass">
+        <a class="brand" href="#top">disinfecting</a>
+
+        <nav class="site-nav" aria-label="Primary navigation">
+          <a href="#discover"><i class="fas fa-compass"></i> Scopri</a>
+          <a href="#my-space"><i class="fas fa-user"></i> Il mio spazio</a>
+          <a href="#movies"><i class="fas fa-film"></i> Film</a>
+          <a href="#series"><i class="fas fa-tv"></i> Serie</a>
+        </nav>
+
+        <div class="header-actions">
+          <button id="openProfileBtn" class="ghost-btn"><i class="fas fa-user-circle"></i> Profilo</button>
+          <button id="openLibraryBtn" class="primary-btn"><i class="fas fa-book"></i> Libreria</button>
+        </div>
+      </header>
+
+      <main id="top">
+        <section class="hero-panel glass">
+          <div class="hero-copy">
+            <div class="eyebrow-row">
+              <span class="eyebrow-chip"><i class="fas fa-database eyebrow-icon"></i> Powered by TMDB</span>
+              <span class="eyebrow-chip subtle"><i class="fas fa-play-circle eyebrow-icon"></i> Streaming • Gratuito</span>
+            </div>
+            <h1>Guarda i tuoi Film e le tue Serie preferite in streaming gratuitamente</h1>
+            <p id="heroText" class="hero-text">
+              Sfoglia i titoli di tendenza, le categorie più popolari, i trailer, i tuoi preferiti e il tuo spazio profilo personale. Tutto completamente gratuito.
+            </p>
+
+            <div class="hero-search glass-soft">
+              <form id="searchForm" class="search-form" role="search">
+                <input
+                  id="searchInput"
+                  type="search"
+                  placeholder="Cerca film o serie TV..."
+                  aria-label="Cerca film o serie TV"
+                />
+                <button type="submit" class="primary-btn"><i class="fas fa-search"></i> Cerca</button>
+              </form>
+            </div>
+
+            <div class="hero-actions">
+              <button id="heroPlayBtn" class="primary-btn"><i class="fas fa-play"></i> Apri in primo piano</button>
+              <button id="heroSaveBtn" class="ghost-btn"><i class="fas fa-plus-circle"></i> Aggiungi alla watchlist</button>
+            </div>
+
+            <div class="hero-stats">
+              <div class="stat-card glass-soft">
+                <span class="stat-label"><i class="fas fa-heart"></i> Preferiti</span>
+                <strong id="favoriteCount">0</strong>
+              </div>
+              <div class="stat-card glass-soft">
+                <span class="stat-label"><i class="fas fa-list"></i> Watchlist</span>
+                <strong id="watchlistCount">0</strong>
+              </div>
+              <div class="stat-card glass-soft">
+                <span class="stat-label"><i class="fas fa-id-card"></i> Profilo</span>
+                <strong id="profileNameLabel">Ospite</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-media">
+            <div class="hero-backdrop-wrap glass-soft">
+              <img id="heroBackdrop" alt="Featured backdrop" />
+              <div class="hero-overlay-card glass-soft">
+                <div class="hero-overlay-top">
+                  <span id="heroTypeBadge" class="type-badge"><i class="fas fa-star"></i> In primo piano</span>
+                  <span id="heroYearBadge" class="muted-badge"><i class="far fa-calendar-alt"></i> —</span>
+                </div>
+                <h2 id="heroTitle">Caricamento...</h2>
+                <p id="heroMeta">Aggiungi il tuo token TMDB in config.js</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="my-space" class="dashboard-grid">
+          <article class="profile-panel glass">
+            <div class="panel-head">
+              <div>
+                <p class="panel-kicker"><i class="fas fa-id-badge"></i> Il tuo profilo</p>
+                <h2>Account locale</h2>
+              </div>
+              <button id="editProfileBtn" class="ghost-btn"><i class="fas fa-edit"></i> Modifica</button>
+            </div>
+
+            <div class="profile-card glass-soft">
+              <img id="profileAvatar" class="profile-avatar" alt="Profile avatar" />
+              <div>
+                <h3 id="profileName">Ospite</h3>
+                <p class="profile-sub"><i class="fas fa-database"></i> Salvato nel tuo browser con localStorage.</p>
+              </div>
+            </div>
+
+            <div class="profile-actions-row">
+              <button id="quickFavoritesBtn" class="ghost-btn full"><i class="fas fa-heart"></i> Apri preferiti</button>
+              <button id="quickWatchlistBtn" class="ghost-btn full"><i class="fas fa-list"></i> Apri watchlist</button>
+            </div>
+          </article>
+
+          <article class="library-panel glass">
+            <div class="panel-head">
+              <div>
+                <p class="panel-kicker"><i class="fas fa-layer-group"></i> La tua libreria</p>
+                <h2>Preferiti & watchlist</h2>
+              </div>
+            </div>
+            <div class="mini-library-grid">
+              <section>
+                <div class="mini-library-head">
+                  <h3><i class="fas fa-heart"></i> Preferiti</h3>
+                  <span id="favoritesMiniCount">0</span>
+                </div>
+                <div id="favoritesPreview" class="mini-poster-row"></div>
+              </section>
+              <section>
+                <div class="mini-library-head">
+                  <h3><i class="fas fa-list"></i> Watchlist</h3>
+                  <span id="watchlistMiniCount">0</span>
+                </div>
+                <div id="watchlistPreview" class="mini-poster-row"></div>
+              </section>
+            </div>
+          </article>
+        </section>
+
+        <section id="discover" class="filters-bar glass">
+          <div class="toggle-group" aria-label="Content mode">
+            <button class="mode-btn active" data-mode="all"><i class="fas fa-globe"></i> Tutto</button>
+            <button class="mode-btn" data-mode="movie"><i class="fas fa-film"></i> Film</button>
+            <button class="mode-btn" data-mode="tv"><i class="fas fa-tv"></i> Serie TV</button>
+          </div>
+          <p id="activeModeText" class="filters-copy"><i class="fas fa-info-circle"></i> Mostrando tutto.</p>
+        </section>
+
+        <section id="searchSection" class="section-block hidden">
+          <div class="section-head">
+            <div>
+              <p class="panel-kicker"><i class="fas fa-search"></i> Ricerca</p>
+              <h2>Risultati</h2>
+            </div>
+            <p id="searchSummary" class="section-copy"></p>
+          </div>
+          <div id="searchGrid" class="cards-grid"></div>
+        </section>
+
+        <section id="movies" class="rows-stack"></section>
+        <section id="series" class="rows-stack"></section>
+      </main>
+
+      <footer class="site-footer">
+        <p><i class="fas fa-database"></i> Questo prodotto utilizza l'API TMDB ma non è approvato o certificato da TMDB.</p>
+        <p><i class="fas fa-shield-alt"></i> Powered by kidnap.lol</p>
+      </footer>
+    </div>
+
+    <dialog id="detailsDialog" class="modal">
+      <div class="modal-shell glass">
+        <button id="closeDetailsBtn" class="modal-close" aria-label="Chiudi"><i class="fas fa-times"></i></button>
+        <div id="detailsContent"></div>
+      </div>
+    </dialog>
+
+    <dialog id="profileDialog" class="modal small-modal">
+      <div class="modal-shell glass">
+        <button id="closeProfileBtn" class="modal-close" aria-label="Chiudi"><i class="fas fa-times"></i></button>
+        <div class="profile-form-wrap">
+          <p class="panel-kicker"><i class="fas fa-user-edit"></i> Impostazioni profilo</p>
+          <h2>Personalizza il tuo profilo locale</h2>
+          <form id="profileForm" class="profile-form">
+            <label>
+              <span><i class="fas fa-user"></i> Nome utente</span>
+              <input id="profileNameInput" type="text" maxlength="30" placeholder="Inserisci il tuo nome" />
+            </label>
+            <label>
+              <span><i class="fas fa-image"></i> URL immagine profilo</span>
+              <input id="profileImageInput" type="url" placeholder="https://example.com/avatar.jpg" />
+            </label>
+            <div class="profile-form-actions">
+              <button type="submit" class="primary-btn"><i class="fas fa-save"></i> Salva profilo</button>
+              <button type="button" id="resetProfileBtn" class="ghost-btn"><i class="fas fa-undo"></i> Reimposta</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </dialog>
+
+    <template id="rowTemplate">
+      <section class="section-block">
+        <div class="section-head">
+          <div>
+            <p class="panel-kicker row-kicker"></p>
+            <h2 class="row-title"></h2>
+            <p class="row-copy"></p>
+          </div>
+        </div>
+        <div class="row-scroll"></div>
+      </section>
+    </template>
+
+    <template id="cardTemplate">
+      <article class="media-card glass-soft">
+        <button class="poster-button" type="button">
+          <div class="poster-wrap">
+            <img class="poster-img" alt="" loading="lazy" />
+            <div class="poster-overlay">
+              <span class="type-badge media-type"></span>
+              <div class="poster-overlay-actions">
+                <button class="chip-btn favorite-btn" type="button"><i class="far fa-heart"></i> Preferito</button>
+                <button class="chip-btn watchlist-btn" type="button"><i class="far fa-plus-square"></i> Watchlist</button>
+              </div>
+            </div>
+          </div>
+          <div class="card-copy">
+            <h3 class="media-title"></h3>
+            <p class="media-subtitle"></p>
+          </div>
+        </button>
+      </article>
+    </template>
+
+    <button id="floatingScrollBtn" class="floating-scroll-btn" aria-label="Scorri verso i contenuti">
+      <i class="fas fa-chevron-down"></i>
+    </button>
+
+    <script type="module" src="./assets/js/app.js"></script>
+  </body>
+</html>
