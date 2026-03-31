@@ -1,0 +1,23 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Create config.js from secret
+        run: |
+          echo "export const TMDB_READ_ACCESS_TOKEN = \"${{ secrets.TMDB_READ_ACCESS_TOKEN }}\";" > assets/js/config.js
+          echo "export const TMDB_LANGUAGE = \"it-IT\";" >> assets/js/config.js
+          echo "export const TMDB_REGION = \"IT\";" >> assets/js/config.js
+          
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
