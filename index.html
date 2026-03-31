@@ -37,16 +37,14 @@
     />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="./assets/css/styles.css" />
-    
     <link rel="icon" type="image/png" href="https://kidnap.lol/favicon.png">
     <link rel="apple-touch-icon" href="https://kidnap.lol/favicon.png">
     
-    <!-- Adsterra Popunder Script -->
+    <!-- Adsterra Popunder Ad -->
     <script src="https://pl29023757.profitablecpmratenetwork.com/2e/de/a3/2edea3a97767f08bb199ee877d1651ae.js"></script>
     
     <script>
       (function() {
-        // Handle hash-based routing for direct links
         const hash = window.location.hash.substring(1);
         if (hash) {
           const hashParams = new URLSearchParams(hash);
@@ -62,7 +60,6 @@
           }
         }
         
-        // Also handle query parameters as fallback
         const urlParams = new URLSearchParams(window.location.search);
         const movieIdParam = urlParams.get('movie');
         const tvIdParam = urlParams.get('tv');
@@ -161,7 +158,7 @@
           </div>
         </section>
 
-        <!-- Adsterra Native Banner Ad with label -->
+        <!-- Ad 1: Native Banner -->
         <div class="ad-container">
           <div class="ad-label"><i class="fas fa-ad"></i> Pubblicità</div>
           <div id="container-87588cc01b23bec81f34bb7f3dd9718b"></div>
@@ -239,19 +236,64 @@
           <div id="searchGrid" class="cards-grid"></div>
         </section>
 
-        <!-- Adsterra Banner 300x250 with label -->
+        <!-- Ad 2: Banner 300x250 (Fixed with your code) -->
         <div class="ad-container">
           <div class="ad-label"><i class="fas fa-ad"></i> Pubblicità</div>
-          <ins class="adsbygoogle"
-               style="display:inline-block;width:300px;height:250px;margin:0 auto;display:block;text-align:center"
-               data-ad-client="ca-pub-8621472718425033"
-               data-ad-slot="28923266"></ins>
-          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+          <script>
+            atOptions = {
+              'key' : '5c49f879064278ad3ffb37c192130172',
+              'format' : 'iframe',
+              'height' : 250,
+              'width' : 300,
+              'params' : {}
+            };
+          </script>
+          <script src="https://www.highperformanceformat.com/5c49f879064278ad3ffb37c192130172/invoke.js"></script>
           <div class="ad-label" style="margin-top: 4px;"><i class="fas fa-info-circle"></i> Annuncio</div>
         </div>
 
         <section id="movies" class="rows-stack"></section>
+        
+        <!-- Ad 3: Banner 468x60 between movie rows -->
+        <div class="ad-container">
+          <div class="ad-label"><i class="fas fa-ad"></i> Pubblicità</div>
+          <script>
+            atOptions = {
+              'key' : '3e9570ca84a5bf03cb6024a9c4c587b1',
+              'format' : 'iframe',
+              'height' : 60,
+              'width' : 468,
+              'params' : {}
+            };
+          </script>
+          <script src="https://www.highperformanceformat.com/3e9570ca84a5bf03cb6024a9c4c587b1/invoke.js"></script>
+          <div class="ad-label" style="margin-top: 4px;"><i class="fas fa-info-circle"></i> Annuncio</div>
+        </div>
+        
         <section id="series" class="rows-stack"></section>
+        
+        <!-- Ad 4: Banner 320x50 (Mobile optimized) -->
+        <div class="ad-container mobile-ad">
+          <div class="ad-label"><i class="fas fa-ad"></i> Pubblicità</div>
+          <script>
+            atOptions = {
+              'key' : 'cf4d20a63a6c6804c70221ddf90423b9',
+              'format' : 'iframe',
+              'height' : 50,
+              'width' : 320,
+              'params' : {}
+            };
+          </script>
+          <script src="https://www.highperformanceformat.com/cf4d20a63a6c6804c70221ddf90423b9/invoke.js"></script>
+          <div class="ad-label" style="margin-top: 4px;"><i class="fas fa-info-circle"></i> Annuncio</div>
+        </div>
+        
+        <!-- Ad 5: Additional Ad Unit -->
+        <div class="ad-container">
+          <div class="ad-label"><i class="fas fa-ad"></i> Pubblicità</div>
+          <script src="https://pl29023760.profitablecpmratenetwork.com/25/95/d4/2595d4e0f68b7929ce5eb04a111683e5.js"></script>
+          <div class="ad-label" style="margin-top: 4px;"><i class="fas fa-info-circle"></i> Annuncio</div>
+        </div>
       </main>
 
       <footer class="site-footer">
