@@ -1423,3 +1423,133 @@ img {
     opacity: 1;
   }
 }
+
+/* Favorite and Watchlist Buttons - Improved Styling */
+.poster-overlay-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.chip-btn {
+  padding: 8px 12px;
+  border-radius: 999px;
+  color: var(--text);
+  font-size: 0.7rem;
+  font-weight: 600;
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  backdrop-filter: blur(8px);
+  letter-spacing: 0.3px;
+}
+
+.chip-btn i {
+  font-size: 0.75rem;
+}
+
+.chip-btn:hover {
+  transform: translateY(-2px);
+  background: rgba(0, 0, 0, 0.95);
+}
+
+.chip-btn.active-favorite {
+  background: rgba(255, 106, 145, 0.85);
+  border-color: #ff6a91;
+  color: white;
+}
+
+.chip-btn.active-favorite:hover {
+  background: rgba(255, 106, 145, 1);
+}
+
+.chip-btn.active-watchlist {
+  background: rgba(105, 229, 174, 0.85);
+  border-color: #69e5ae;
+  color: white;
+}
+
+.chip-btn.active-watchlist:hover {
+  background: rgba(105, 229, 174, 1);
+}
+
+/* Ad Label Styling */
+.ad-label {
+  font-size: 10px;
+  color: var(--muted);
+  text-align: center;
+  padding: 4px 0;
+  background: rgba(0, 0, 0, 0.2);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 4px;
+  margin-bottom: 4px;
+}
+
+.ad-label i {
+  font-size: 8px;
+  margin-right: 4px;
+}
+
+/* Ad Containers with label */
+.ad-container {
+  position: relative;
+  text-align: center;
+  margin: 20px 0;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  padding: 8px 0;
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.ad-container .ad-label {
+  margin-top: -4px;
+  margin-bottom: 8px;
+}
+
+/* Native banner container */
+#container-87588cc01b23bec81f34bb7f3dd9718b {
+  min-height: 250px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  margin: 15px 0;
+  position: relative;
+}
+
+/* Responsive card adjustments */
+@media (max-width: 768px) {
+  .chip-btn {
+    padding: 6px 10px;
+    font-size: 0.65rem;
+  }
+  
+  .chip-btn i {
+    font-size: 0.7rem;
+  }
+  
+  .poster-overlay-actions {
+    gap: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .chip-btn {
+    padding: 5px 8px;
+    font-size: 0.6rem;
+  }
+  
+  .chip-btn i {
+    font-size: 0.65rem;
+  }
+}
