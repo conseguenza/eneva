@@ -129,6 +129,13 @@ export function buildDetailsHtml(details, item, trailerKey, providerLink, state)
   const favoriteLabel = isFavorited ? '<i class="fas fa-heart"></i> Rimuovi dai preferiti' : '<i class="far fa-heart"></i> Aggiungi ai preferiti';
   const watchlistLabel = isWatchlisted ? '<i class="fas fa-check-circle"></i> Rimuovi dalla watchlist' : '<i class="far fa-plus-square"></i> Aggiungi alla watchlist';
   
+  const shareUrl = `${window.location.origin}/?${item.media_type}=${item.id}`;
+  const shareButtonHtml = `
+    <button class="ghost-btn share-btn" data-url="${shareUrl}" data-title="${escapeHtml(item.title)}">
+      <i class="fas fa-share-alt"></i> Condividi
+    </button>
+  `;
+  
   const playButtonHtml = item.media_type === "movie" ? `
     <button class="primary-btn play-movie-btn" data-tmdb-id="${item.id}">
       <i class="fas fa-play"></i> Riproduci Film
@@ -162,6 +169,7 @@ export function buildDetailsHtml(details, item, trailerKey, providerLink, state)
 
         <div class="details-actions">
           ${playButtonHtml}
+          ${shareButtonHtml}
           <button class="ghost-btn" data-action="toggle-favorite">${favoriteLabel}</button>
           <button class="ghost-btn" data-action="toggle-watchlist">${watchlistLabel}</button>
           ${providerLink ? `<a class="ghost-btn" href="${escapeHtml(providerLink)}" target="_blank" rel="noreferrer"><i class="fas fa-tv"></i> Provider ufficiali</a>` : ""}

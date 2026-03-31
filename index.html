@@ -5,12 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="streaming.kidnap.lol — Guarda film e serie TV in streaming gratuito. Scopri i titoli più popolari, crea la tua watchlist e gestisci i tuoi preferiti."
+      content="disinfecting.kidnap.lol — Guarda film e serie TV in streaming gratuito. Scopri i titoli più popolari, crea la tua watchlist e gestisci i tuoi preferiti."
     />
-    <title>disinfecting | Streaming Gratuito</title>
-    <link rel="icon" type="image/png" href="https://kidnap.lol/favicon.png" />
-    <link rel="shortcut icon" href="https://kidnap.lol/favicon.png" />
-    <link rel="apple-touch-icon" href="https://kidnap.lol/favicon.png" />
+    <title>disinfecting.kidnap.lol | Streaming Gratuito</title>
+    
+    <!-- Open Graph / Facebook / Discord / Telegram -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="disinfecting.kidnap.lol" />
+    <meta property="og:title" content="disinfecting.kidnap.lol | Streaming Gratuito" />
+    <meta property="og:description" content="Guarda film e serie TV in streaming gratuito. Scopri i titoli più popolari, crea la tua watchlist e gestisci i tuoi preferiti." />
+    <meta property="og:image" content="https://disinfecting.kidnap.lol/assets/img/og-image.jpg" />
+    <meta property="og:url" content="https://disinfecting.kidnap.lol" />
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@disinfecting" />
+    <meta name="twitter:title" content="disinfecting.kidnap.lol | Streaming Gratuito" />
+    <meta name="twitter:description" content="Guarda film e serie TV in streaming gratuito. Scopri i titoli più popolari, crea la tua watchlist e gestisci i tuoi preferiti." />
+    <meta name="twitter:image" content="https://disinfecting.kidnap.lol/assets/img/og-image.jpg" />
+    
+    <!-- Discord specific -->
+    <meta name="theme-color" content="#88a7ff" />
+    
     <link rel="preconnect" href="https://image.tmdb.org" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -21,6 +37,39 @@
     />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="./assets/css/styles.css" />
+    
+    <script>
+      (function() {
+        // Handle hash-based routing for direct links
+        const hash = window.location.hash.substring(1);
+        if (hash) {
+          const hashParams = new URLSearchParams(hash);
+          const movieId = hashParams.get('movie');
+          const tvId = hashParams.get('tv');
+          
+          if (movieId) {
+            sessionStorage.setItem('directLink', JSON.stringify({ type: 'movie', id: movieId }));
+            window.location.hash = '';
+          } else if (tvId) {
+            sessionStorage.setItem('directLink', JSON.stringify({ type: 'tv', id: tvId }));
+            window.location.hash = '';
+          }
+        }
+        
+        // Also handle query parameters as fallback
+        const urlParams = new URLSearchParams(window.location.search);
+        const movieIdParam = urlParams.get('movie');
+        const tvIdParam = urlParams.get('tv');
+        
+        if (movieIdParam) {
+          sessionStorage.setItem('directLink', JSON.stringify({ type: 'movie', id: movieIdParam }));
+          window.history.replaceState({}, document.title, window.location.pathname);
+        } else if (tvIdParam) {
+          sessionStorage.setItem('directLink', JSON.stringify({ type: 'tv', id: tvIdParam }));
+          window.history.replaceState({}, document.title, window.location.pathname);
+        }
+      })();
+    </script>
   </head>
   <body>
     <div class="app-bg" aria-hidden="true">
@@ -251,6 +300,7 @@
       </article>
     </template>
 
+    <!-- Floating Scroll Button -->
     <button id="floatingScrollBtn" class="floating-scroll-btn" aria-label="Scorri verso i contenuti">
       <i class="fas fa-chevron-down"></i>
     </button>

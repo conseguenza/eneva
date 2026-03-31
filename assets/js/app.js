@@ -2,6 +2,7 @@ import { MOVIE_ROWS, TV_ROWS } from "./categories.js";
 import { buildDetailsHtml, createCard, renderMiniLibrary, renderProfile, buildEpisodeSelector, escapeHtml } from "./ui.js";
 import { backdropUrl, getDetails, getProviderLink, getRowData, getTrailerKey, getTrendingAll, normalizeMedia, searchMulti, getTVShowDetails } from "./tmdb.js";
 import { player } from "./player.js";
+import { handleDirectLink } from "./router.js";
 
 const STORAGE_KEYS = {
   profile: "disinfecting_profile",
@@ -86,6 +87,8 @@ function persistProfile() {
 }
 
 function showNotification(message, type = 'info') {
+  console.log('Showing notification:', message, type);
+  
   const existingNotification = document.querySelector('.notification');
   if (existingNotification) {
     existingNotification.remove();
@@ -94,7 +97,10 @@ function showNotification(message, type = 'info') {
   const notification = document.createElement('div');
   notification.className = `notification ${type}`;
   
-  const icon = type === 'success' ? '✓' : type === 'error' ? '✗' : 'ℹ';
+  let icon = '';
+  if (type === 'success') icon = '✓';
+  else if (type === 'error') icon = '✗';
+  else icon = 'ℹ';
   
   notification.innerHTML = `
     <div class="notification-content">
@@ -105,12 +111,124 @@ function showNotification(message, type = 'info') {
   
   document.body.appendChild(notification);
   
+  notification.offsetHeight;
+  
+  notification.style.animation = 'slideIn 0.3s ease forwards';
+  
   setTimeout(() => {
     notification.style.animation = 'slideOut 0.3s ease forwards';
     setTimeout(() => {
-      notification.remove();
+      if (notification.parentNode) {
+        notification.remove();
+      }
     }, 300);
   }, 3000);
+}
+
+function animateShareButton(button, title) {
+  if (!button) return;
+  
+  const originalHTML = button.innerHTML;
+  const originalWidth = button.offsetWidth;
+  
+  button.innerHTML = '<i class="fas fa-check"></i> Link copiato!';
+  button.style.background = 'linear-gradient(135deg, #69e5ae, #4cae7c)';
+  button.style.borderColor = '#69e5ae';
+  button.style.transform = 'scale(1.05)';
+  button.style.transition = 'all 0.3s ease';
+  
+  setTimeout(() => {
+    button.innerHTML = originalHTML;
+    button.style.background = '';
+    button.style.borderColor = '';
+    button.style.transform = '';
+  }, 2000);
+}
+
+function copyToClipboard(text, title, buttonElement) {
+  console.log('Copying to clipboard:', text, title);
+  navigator.clipboard.writeText(text).then(() => {
+    if (buttonElement) {
+      animateShareButton(buttonElement, title);
+    }
+    
+    let movieId = null;
+    let tvId = null;
+    
+    if (text.includes('movie=')) {
+      const match = text.match(/movie=(\d+)/);
+      if (match) movieId = match[1];
+    } else if (text.includes('tv=')) {
+      const match = text.match(/tv=(\d+)/);
+      if (match) tvId = match[1];
+    }
+    
+    if (movieId) {
+      sessionStorage.setItem('directLinkTitle', title);
+    } else if (tvId) {
+      sessionStorage.setItem('directLinkTitle', title);
+    }
+    
+    console.log('Link copied successfully');
+  }).catch((err) => {
+    console.error('Clipboard error:', err);
+    if (buttonElement) {
+      const originalHTML = buttonElement.innerHTML;
+      buttonElement.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Errore!';
+      buttonElement.style.background = 'linear-gradient(135deg, #ff6a91, #ff4757)';
+      setTimeout(() => {
+        buttonElement.innerHTML = originalHTML;
+        buttonElement.style.background = '';
+      }, 2000);
+    }
+  });
+}
+
+async function shareContent(url, title, buttonElement) {
+  console.log('Share content called for:', url, title);
+  
+  let movieId = null;
+  let tvId = null;
+  
+  if (url.includes('movie=')) {
+    const match = url.match(/movie=(\d+)/);
+    if (match) movieId = match[1];
+  } else if (url.includes('tv=')) {
+    const match = url.match(/tv=(\d+)/);
+    if (match) tvId = match[1];
+  }
+  
+  if (movieId) {
+    sessionStorage.setItem('directLinkTitle', title);
+  } else if (tvId) {
+    sessionStorage.setItem('directLinkTitle', title);
+  }
+  
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: title,
+        text: `🎬 Guarda ${title} su disinfecting.kidnap.lol`,
+        url: url,
+      });
+      if (buttonElement) {
+        const originalHTML = buttonElement.innerHTML;
+        buttonElement.innerHTML = '<i class="fas fa-check"></i> Condiviso!';
+        buttonElement.style.background = 'linear-gradient(135deg, #69e5ae, #4cae7c)';
+        setTimeout(() => {
+          buttonElement.innerHTML = originalHTML;
+          buttonElement.style.background = '';
+        }, 2000);
+      }
+    } catch (err) {
+      console.log('Share cancelled or failed:', err);
+      if (err.name !== 'AbortError') {
+        copyToClipboard(url, title, buttonElement);
+      }
+    }
+  } else {
+    copyToClipboard(url, title, buttonElement);
+  }
 }
 
 function toggleCollection(listName, item) {
@@ -289,6 +407,20 @@ async function openDetails(item) {
   }
   if (watchlistBtn) {
     watchlistBtn.addEventListener("click", () => toggleCollection("watchlist", normalized));
+  }
+  
+  const shareBtn = els.detailsContent.querySelector('.share-btn');
+  if (shareBtn) {
+    const shareUrl = shareBtn.getAttribute('data-url');
+    const shareTitle = shareBtn.getAttribute('data-title');
+    console.log('Share button setup - URL:', shareUrl, 'Title:', shareTitle);
+    
+    shareBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      console.log('Share button clicked for:', shareTitle);
+      shareContent(shareUrl, shareTitle, shareBtn);
+    });
   }
   
   const playMovieBtn = els.detailsContent.querySelector('.play-movie-btn');
@@ -488,7 +620,6 @@ function wireEvents() {
     });
   });
 
-  // Floating Scroll Button Logic
   const floatingBtn = document.getElementById('floatingScrollBtn');
   if (floatingBtn) {
     const rowsContainer = document.querySelector('.rows-stack');
@@ -555,7 +686,7 @@ async function init() {
     const featured = trending.find((item) => item.backdrop_path) || trending[0];
     if (featured) setHero(featured);
     await buildRows();
-    showNotification('Benvenuto su disinfecting by kidnap.lol!', 'success');
+    showNotification('Benvenuto su disinfecting.kidnap.lol!', 'success');
   } catch (error) {
     console.error("Init error:", error);
     els.heroTitle.textContent = "Configurazione TMDB richiesta";
@@ -564,6 +695,13 @@ async function init() {
     els.movies.innerHTML = `<section class="section-block"><div class="empty-state"><i class="fas fa-exclamation-triangle"></i> ${error.message}</div></section>`;
     showNotification('Token TMDB richiesto. Controlla config.js', 'error');
   }
+  
+  await handleDirectLink();
+  
+  window.addEventListener('libraryUpdated', () => {
+    syncDerivedUi();
+    rerenderVisibleCards();
+  });
 }
 
 init();
